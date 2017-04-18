@@ -3,6 +3,7 @@ package Controller;
 import DAO.DAO;
 import Models.Oficina;
 import Models.Usuario;
+import retrofit2.http.Body;
 
 import javax.inject.Singleton;
 import javax.ws.rs.*;
@@ -43,18 +44,25 @@ public class JSONController extends DAO {
     }
 
     @GET
-    @Path("/usuario/got_name/{nombre}")
+    @Path("/usuario/got_email/{email}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Usuario getUsuarioByName(@PathParam("nombre") String nombre){
+    public Usuario getUsuarioByEmail(@PathParam("email") String email){
 
         Usuario finded = new Usuario();
 
         for (int i = 0; i<usuarios.size(); i++){
-            if (usuarios.get(i).getNombre().equalsIgnoreCase(nombre)){
+            if (usuarios.get(i).getEmail().equalsIgnoreCase(email)){
                 finded = usuarios.get(i);
             }
         }
         return finded;
+    }
+
+    @GET
+    @Path("/usuario/get_all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Usuario> getUsuarios(){
+        return this.usuarios;
     }
 
     @POST
@@ -84,6 +92,13 @@ public class JSONController extends DAO {
             }
         }
         return finded;
+    }
+
+    @GET
+    @Path("/oficina/get_all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Oficina> getOficinas(){
+        return this.oficinas;
     }
 
     @POST

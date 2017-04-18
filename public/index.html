@@ -7,32 +7,61 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
+
   <script src="jquery-3.2.0.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
 	<script>
-        var usuario = {"nombre": "nombre", "email": "email", "password": "password"};
-        $(document).ready(function () {
-            $("#registrar").click(function () {
-                usuario.nombre = $("#nombre").val();
-                usuario.email = $("#email").val();
-                usuario.password = $("#password").val();
-                var registro = JSON.stringify(usuario);
-                alert(registro);
-                $.post("http://localhost:8080/myapp/json/usuario/new", registro, function (data, status) {
-                    alert("Usuario añadido: " +data.email+ "\nStatus: "+status)
-                }, "json")
-            });
-        });
 
         $(document).ready(function () {
-            $("#mostrar").click(function () {
-                var nombreS = $("#nombreSearch").val();
-                $.get("http://localhost:8080/myapp/json/usuario/got_name/" + nombreS, function (data, status) {
-                    alert("Nombre: "+data.nombre+ "\nE-mail: "+ data.email+ "\nStatus: "+status);
+
+            $("#registrar").click(function () {
+                var nombre = $("#nombre").val().toString();
+                var email = $("#email").val().toString();
+                var password = $("#password").val().toString();
+                    $.post("http://localhost:8080/myapp/json/usuario/new", { nombre: nombre, email: email, password: password },
+                    function (data) {
+                    alert("Usuario añadido: " +data)
+                })
+            });
+
+            $("#recover").click(function () {
+                var emailRecover = $("#passwordRecover").val();
+                $.get("http://localhost:8080/myapp/json/usuario/got_email/" + emailRecover, function (data, status) {
+                    alert("Contraseña: "+data.password+ "\nStatus: "+status)
                 });
             });
+
+            $.getJSON("http://localhost:8080/myapp/json/usuario/get_all",
+                function (json) {
+                    var tr;
+                    for (var i = 0; i < json.length; i++) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + json[i].nombre + "</td>");
+                        tr.append("<td>" + json[i].email + "</td>");
+                        $('table').append(tr);
+                    }
+                });
+
         });
+
+        function myFunction() {
+            var input, filter, table, tr, td, i;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("tableUsuarios");
+            tr = table.getElementsByTagName("tr");
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                        if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+        }
+
 	</script>
 
 </head>
@@ -46,31 +75,83 @@
 		<h2>Registrar usuario:</h2>
 			<form>
 			<div class="form-group">
+                <div class="form-group has-feedback">
 				<label for="nombre">Nombre:</label>
 				<input type="text" class="form-control" id="nombre" placeholder="Introduce un nombre">
+                    <i class="glyphicon glyphicon-user form-control-feedback"></i>
+                </div>
 			</div>
 			<div class="form-group">
+                <div class="form-group has-feedback">
 				<label for="email">E-mail:</label>
 				<input type="email" class="form-control" id="email" placeholder="Introduce un email">
+                    <i class="glyphicon glyphicon-envelope form-control-feedback"></i>
+                </div>
 			</div>
 			<div class="form-group">
+                <div class="form-group has-feedback">
 				<label for="password">Password:</label>
 				<input type="password" class="form-control" id="password" placeholder="Introduce un password">
+                    <i class="glyphicon glyphicon-lock form-control-feedback"></i>
+                </div>
 			</div>
 			
-			<button type="registrar" id="registrar" class="btn btn-default btn-lg">Registrar</button>
+			<button type="registrar" id="registrar" class="btn-primary btn-default btn-lg">Registrar</button>
 			</form>
+            <p> </p>
+            <form>
+                <div class="form-group">
+                    <label for="email">Recuperar contraseña:</label>
+                    <input type="email" class="form-control" id="passwordRecover" placeholder="Introduce tu email">
+                </div>
+                <button type="recover" id="recover" class="btn-warning btn-default btn-lg">Recuperar</button>
+            </form>
+
 	</div>
 	
 	<div class="container col-sm-4">
-		<h2>Busca un usuario por nombre:</h2>
-		<form>
-		<div class="form-group">
-			<label for="nombre">Nombre:</label>
-			<input type="text" class="form-control" id="nombreSearch" placeholder="Introduce un nombre">
 
+        <h2>Usuarios registrados:</h2>
+        <form>
+            <div class="form-group">
+                <div class="form-group has-feedback">
+                <input type="text" id="myInput" class="form-control" onkeyup="myFunction()"  placeholder="Filtrar por nombre...">
+                <i class="glyphicon glyphicon-search form-control-feedback"></i>
+                </div>
+                <table class="table", id="tableUsuarios">
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>E-mail</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
 		</div>
-			<button type="button" id="mostrar" class="btn btn-default btn-md">Buscar</button>
+
+		</form>
+	</div>
+
+	<div class="container col-sm-4">
+		<h2>Agregar oficina:</h2>
+		<form>
+			<div class="form-group">
+                <div class="form-group has-feedback">
+				<label for="nombre">Nombre:</label>
+				<input type="text" class="form-control" id="nombreO" placeholder="Introduce un nombre">
+                    <i class="glyphicon glyphicon-pencil form-control-feedback"></i>
+                </div>
+			</div>
+			<div class="form-group">
+                <div class="form-group has-feedback">
+				<label for="address">Direccion:</label>
+				<input type="text" class="form-control" id="address" placeholder="Introduce un email">
+                    <i class="glyphicon glyphicon-map-marker form-control-feedback"></i>
+                </div>
+			</div>
+
+			<button type="add" id="add" class="btn-primary btn-default btn-lg">Agregar</button>
 		</form>
 	</div>
 	
