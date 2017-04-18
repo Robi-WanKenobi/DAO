@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <title>Minimo 1</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  
+  <script src="jquery-3.2.0.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script>
+        var usuario = {"nombre": "nombre", "email": "email", "password": "password"};
+        $(document).ready(function () {
+            $("#registrar").click(function () {
+                usuario.nombre = $("#nombre").val();
+                usuario.email = $("#email").val();
+                usuario.password = $("#password").val();
+                var registro = JSON.stringify(usuario);
+                $.post("http://localhost:8080/myapp/json/usuario/new", registro, function (data, status) {
+                    alert("Data: " + data.email + "\nStatus: " + status);
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#mostrar").click(function () {
+                var id = $("#id").val();
+                $.get("http://localhost:8080/myapp/json/usuario/" + id, function (data, status) {
+                    $("#nombreT").text(data.nombre);
+                    $("#emailT").text(data.email);
+                    $("#passwordT").text(data.password);
+                });
+            });
+        });
+	</script>
+
+</head>
+<body>
+
+	<div class="page-header">
+		<h1 align = "center">MINIMO 1</h1>
+	</div>
+	
+	<div class="container col-sm-4">
+		<h2>Registrar usuario:</h2>
+			<form>
+			<div class="form-group">
+				<label for="nombre">Nombre:</label>
+				<input type="text" class="form-control" id="nombre" placeholder="Introduce un nombre">
+			</div>
+			<div class="form-group">
+				<label for="email">E-mail:</label>
+				<input type="email" class="form-control" id="email" placeholder="Introduce un email">
+			</div>
+			<div class="form-group">
+				<label for="password">Password:</label>
+				<input type="password" class="form-control" id="password" placeholder="Introduce un password">
+			</div>
+			
+			<button type="registrar" id="registrar" class="btn btn-default btn-lg">Registrar</button>
+			</form>
+	</div>
+	
+	<div class="container col-sm-4">
+		<h2>Busca un usuario por identificador:</h2>
+		<form>
+		<div class="form-group">
+			<label for="id">Identificador:</label>
+			<input type="id" class="form-control" id="id" placeholder="Introduce un identificador">
+
+		</div>
+			<button type="number" id="mostrar" class="btn btn-default btn-md">Mostrar</button>
+		</form>
+
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Email</th>
+				<th>Password</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td id="nombreT"></td>
+				<td id="emailT"></td>
+				<td id="passwordT"></td>
+			</tr>
+			</tbody>
+		</table>
+
+	</div>
+	
+</body>
+</html>

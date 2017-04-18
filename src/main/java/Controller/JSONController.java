@@ -1,9 +1,8 @@
-package JSONController;
+package Controller;
 
 import DAO.DAO;
 import Models.Oficina;
 import Models.Usuario;
-import com.sun.jmx.snmp.SnmpUnknownSubSystemException;
 
 import javax.inject.Singleton;
 import javax.ws.rs.*;
@@ -11,8 +10,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.SQLException;
 import java.util.*;
-
-import static Models.Usuario.*;
 
 /**
  * Created by Roberto on 21/03/2017.
