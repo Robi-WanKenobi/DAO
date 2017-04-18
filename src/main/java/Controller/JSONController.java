@@ -28,14 +28,29 @@ public class JSONController extends DAO {
     }
 
     @GET
-    @Path("/usuario/{id}")
+    @Path("/usuario/got_id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Usuario getUsuario(@PathParam("id") int id){
+    public Usuario getUsuariobyId(@PathParam("id") int id){
 
         Usuario finded = new Usuario();
 
         for (int i = 0; i<usuarios.size(); i++){
             if (usuarios.get(i).getId() == id){
+                finded = usuarios.get(i);
+            }
+        }
+        return finded;
+    }
+
+    @GET
+    @Path("/usuario/got_name/{nombre}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Usuario getUsuarioByName(@PathParam("nombre") String nombre){
+
+        Usuario finded = new Usuario();
+
+        for (int i = 0; i<usuarios.size(); i++){
+            if (usuarios.get(i).getNombre().equalsIgnoreCase(nombre)){
                 finded = usuarios.get(i);
             }
         }

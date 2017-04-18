@@ -18,19 +18,18 @@
                 usuario.email = $("#email").val();
                 usuario.password = $("#password").val();
                 var registro = JSON.stringify(usuario);
+                alert(registro);
                 $.post("http://localhost:8080/myapp/json/usuario/new", registro, function (data, status) {
-                    alert("Data: " + data.email + "\nStatus: " + status);
-                });
+                    alert("Usuario añadido: " +data.email+ "\nStatus: "+status)
+                }, "json")
             });
         });
 
         $(document).ready(function () {
             $("#mostrar").click(function () {
-                var id = $("#id").val();
-                $.get("http://localhost:8080/myapp/json/usuario/" + id, function (data, status) {
-                    $("#nombreT").text(data.nombre);
-                    $("#emailT").text(data.email);
-                    $("#passwordT").text(data.password);
+                var nombreS = $("#nombreSearch").val();
+                $.get("http://localhost:8080/myapp/json/usuario/got_name/" + nombreS, function (data, status) {
+                    alert("Nombre: "+data.nombre+ "\nE-mail: "+ data.email+ "\nStatus: "+status);
                 });
             });
         });
@@ -64,33 +63,15 @@
 	</div>
 	
 	<div class="container col-sm-4">
-		<h2>Busca un usuario por identificador:</h2>
+		<h2>Busca un usuario por nombre:</h2>
 		<form>
 		<div class="form-group">
-			<label for="id">Identificador:</label>
-			<input type="id" class="form-control" id="id" placeholder="Introduce un identificador">
+			<label for="nombre">Nombre:</label>
+			<input type="text" class="form-control" id="nombreSearch" placeholder="Introduce un nombre">
 
 		</div>
-			<button type="number" id="mostrar" class="btn btn-default btn-md">Mostrar</button>
+			<button type="button" id="mostrar" class="btn btn-default btn-md">Buscar</button>
 		</form>
-
-		<table class="table table-striped">
-			<thead>
-			<tr>
-				<th>Nombre</th>
-				<th>Email</th>
-				<th>Password</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td id="nombreT"></td>
-				<td id="emailT"></td>
-				<td id="passwordT"></td>
-			</tr>
-			</tbody>
-		</table>
-
 	</div>
 	
 </body>
