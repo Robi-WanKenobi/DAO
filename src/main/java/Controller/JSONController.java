@@ -17,7 +17,7 @@ import java.util.*;
  */
 
 @Path("/json")
-public class JSONController extends DAO {
+public class JSONController{
 
     protected List<Usuario> usuarios;
     protected List<Oficina> oficinas;
@@ -76,7 +76,22 @@ public class JSONController extends DAO {
             return Response.status(201).entity(yesResult).build();
         }
             String noResult = "El email ya esta registrado";
-            return Response.status(201).entity(noResult).build();
+            return Response.status(418).entity(noResult).build();
+    }
+
+    @GET
+    @Path("/usuario/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUsuarioInJSON(@PathParam("id") int id) {
+
+        if (searchID(id)){
+            Usuario u = new Usuario();
+            u.delete(id);
+            String yesResult = "Usuario eliminado.";
+            return Response.status(201).entity(yesResult).build();
+        }
+        String noResult = "El id no existe.";
+        return Response.status(418).entity(noResult).build();
     }
 
     @GET
@@ -121,6 +136,17 @@ public class JSONController extends DAO {
             }
         }
         return true;
+    }
+
+    public boolean searchID(int id){
+        for (int i = 0; i<usuarios.size(); i++)
+        {
+            if (usuarios.get(i).getId()==id)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
