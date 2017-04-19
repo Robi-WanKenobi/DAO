@@ -79,9 +79,9 @@ public class JSONController{
             return Response.status(418).entity(noResult).build();
     }
 
-    @GET
+    @POST
     @Path("/usuario/delete/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteUsuarioInJSON(@PathParam("id") int id) {
 
         if (searchID(id)){

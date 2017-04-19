@@ -1,5 +1,6 @@
 package Main;
 
+import org.apache.log4j.BasicConfigurator;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -22,6 +23,8 @@ public class App
     }
 
     public static void main(String[] args) throws IOException, SQLException {
+
+        BasicConfigurator.configure();
 
         final HttpServer server = startServer();
 

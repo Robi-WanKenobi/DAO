@@ -11,11 +11,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 
 /**
  * Created by Roberto on 15/03/2017.
  */
 public abstract class DAO {
+
+    final Logger logger = Logger.getLogger("ejemplo");
 
     static DBConnection connection = new DBConnection();
     static Connection con = connection.getCon();
@@ -78,6 +82,7 @@ public abstract class DAO {
             sb.append(",");
         }
         sb.append(")");
+        logger.info(sb);
 
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sb.toString());
@@ -86,10 +91,10 @@ public abstract class DAO {
         }
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println(e.getMessage());
+            logger.error(e.getMessage());
         }
 
-       System.out.println(sb);
+
     }
 
     public void update(){
@@ -108,7 +113,7 @@ public abstract class DAO {
         sb.append(" WHERE (conditions);");
     }
 
-    public void select(int id){
+    public void select(int id) throws InvocationTargetException, IllegalAccessException {
 
         StringBuffer sb = new StringBuffer("SELECT *");
 
@@ -117,6 +122,7 @@ public abstract class DAO {
         sb.append(this.getClass().getSimpleName());
 
         sb.append(" WHERE id = "+id);
+        logger.info(sb);
 
         try {
             Statement stat = con.createStatement();
@@ -124,22 +130,31 @@ public abstract class DAO {
             ResultSetMetaData rsmd = rs.getMetaData();
             rs.next();
 
+            Field[] atributes = this.getClass().getDeclaredFields();
+            Method[] methods = this.getClass().getDeclaredMethods();
+            Object o = new Object();
+            o = (Object) this;
+
             for (int i=1; i<rsmd.getColumnCount() +1; i++){
 
             }
-
             for (int i=1; i<rsmd.getColumnCount() + 1; i++){
 
-                if (rsmd.getColumnTypeName(i).equals("INT")){
-                    System.out.println(rsmd.getColumnLabel(i)+ ": "+rs.getInt(i));
+                for (Field f : atributes){
+                    if (rsmd.getColumnName(i).equalsIgnoreCase(f.getName())){
+
+                    }
+                }
+                /*if (rsmd.getColumnName(i).equalsIgnoreCase{
+                    log.trace(rsmd.getColumnLabel(i)+ ": "+rs.getInt(i));
                 }
                 if (rsmd.getColumnTypeName(i).equals("VARCHAR")){
-                    System.out.println(rsmd.getColumnLabel(i)+ ": " +rs.getString(i));
+                    log.trace(rsmd.getColumnLabel(i)+ ": " +rs.getString(i));
                 }
                 if (i==rsmd.getColumnCount()){
                     rs.next();
                     i = 0;
-                }
+                }*/
             }
         }
         catch (SQLException e){
@@ -152,7 +167,7 @@ public abstract class DAO {
         StringBuffer sb = new StringBuffer("DELETE FROM ");
         sb.append(this.getClass().getSimpleName());
         sb.append(" WHERE id = " + id);
-        System.out.println(sb);
+        logger.info(sb);
 
         try {
             PreparedStatement preparedStatement = con.prepareStatement(sb.toString());
